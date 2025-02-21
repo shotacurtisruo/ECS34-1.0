@@ -170,16 +170,30 @@ namespace StringUtils
 
     std::vector<std::string> Split(const std::string &str, const std::string &splt) noexcept
     {
-        // Replace code here
+        // Replace code her
+        // this splits the strin gup into a vector of strings based on splt parameter.
+        // if splt parameter is an empty string, split on white space
         std::vector<std::string> result;
-        std::string temp = str;
-        for (int i = 0; i < temp.length(); i++)
+        if (splt.empty())
         {
-            if (temp[i] == splt[0])
+            std::istringstream iss(str);
+            std::string word;
+            while (iss >> word)
             {
-                result.push_back(temp.substr(0, i));
-                temp = temp.substr(i + 1);
+                result.push_back(word);
             }
+        }
+        else
+        {
+            size_t start = 0;
+            size_t end = str.find(splt);
+            while (end != std::string::npos)
+            {
+                result.push_back(str.substr(start, end - start));
+                start = end + splt.length();
+                end = str.find(splt, start);
+            }
+            result.push_back(str.substr(start));
         }
 
         return result;
@@ -197,8 +211,35 @@ namespace StringUtils
 
     std::string ExpandTabs(const std::string &str, int tabsize) noexcept
     {
-        // Replace code here
-        return "";
+
+        std::string res;
+        size_t curr = 0;
+        if (tabsize == 0)
+        {
+            for (char c : str)
+            {
+                if (c != '\t')
+                {
+                    res += c;
+                }
+            }
+            return res;
+        }
+        for (char c : str)
+        {
+            if (c == '\t')
+            {
+                size_t numspaces = tabsize - (curr % tabsize);
+                res.append(numspaces, ' ');
+                curr += numspaces;
+            }
+            else
+            {
+                res += c;
+                curr += 1;
+            }
+        }
+        return res;
     }
 
     int EditDistance(const std::string &left, const std::string &right, bool ignorecase) noexcept
