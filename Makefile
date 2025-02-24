@@ -1,13 +1,13 @@
 CXX = g++
-CXXFLAGS = -std=c++17 -Wall -g -Iinclude -I/opt/homebrew/include
+CXXFLAGS = -std=c++17 -Wall -g -Iproj1/include -I/opt/homebrew/include
 LDFLAGS = -L/opt/homebrew/lib -lgtest -lgtest_main -lpthread
 OBJ_DIR = obj
 BIN_DIR = bin
 
 
 # Source files (update if filenames differ)
-SRC = src/StringUtils.cpp
-TEST_SRC = testsrc/StringUtilsTest.cpp
+SRC = proj1/src/StringUtils.cpp
+TEST_SRC = proj1/testsrc/StringUtilsTest.cpp
 
 
 # Object files (must match source filenames)
@@ -31,13 +31,13 @@ $(TARGET): $(OBJS)
 
 
 # Compile source files
-$(OBJ_DIR)/%.o: src/%.cpp
+$(OBJ_DIR)/%.o: proj1/src/%.cpp
 	@echo "didit compile the source files -"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
 
 # Compile test files
-$(OBJ_DIR)/%.o: testsrc/%.cpp
+$(OBJ_DIR)/%.o: proj1/testsrc/%.cpp
 	@echo "did it compile the test files -"
 	@$(CXX) $(CXXFLAGS) -c $< -o $@
 
@@ -52,5 +52,3 @@ clean:
 	@echo "did this work - the cleaning part"
   #these are just to see which ones ran and worked.
 	@rm -rf $(OBJ_DIR) $(BIN_DIR)
-
-
