@@ -106,6 +106,7 @@ namespace StringUtils
                 break;
             }
         }
+        return result;
     }
 
     std::string Center(const std::string &str, int width, char fill) noexcept
@@ -173,30 +174,18 @@ namespace StringUtils
         // Replace code her
         // this splits the strin gup into a vector of strings based on splt parameter.
         // if splt parameter is an empty string, split on white space
-        std::vector<std::string> result;
-        if (splt.empty())
-        {
-            std::istringstream iss(str);
-            std::string word;
-            while (iss >> word)
-            {
-                result.push_back(word);
-            }
-        }
-        else
-        {
-            size_t start = 0;
-            size_t end = str.find(splt);
-            while (end != std::string::npos)
-            {
-                result.push_back(str.substr(start, end - start));
-                start = end + splt.length();
-                end = str.find(splt, start);
-            }
-            result.push_back(str.substr(start));
-        }
 
-        return result;
+        std::vector<std::string> v;
+        std::string res = str;
+        auto ind = str.find(splt);
+        while (ind != std::string::npos)
+        {
+            v.push_back(res.substr(0, ind));
+            res = res.substr(ind + 1);
+            ind = res.find(splt);
+        }
+        v.push_back(res);
+        return v;
     }
 
     std::string Join(const std::string &str, const std::vector<std::string> &vect) noexcept
@@ -212,34 +201,23 @@ namespace StringUtils
     std::string ExpandTabs(const std::string &str, int tabsize) noexcept
     {
 
-        std::string res;
-        size_t curr = 0;
-        if (tabsize == 0)
+        std::string result;
+
+        for (size_t i = 0; i < str.length(); i++)
         {
-            for (char c : str)
+            if (str[i] == '\t')
             {
-                if (c != '\t')
-                {
-                    res += c;
-                }
-            }
-            return res;
-        }
-        for (char c : str)
-        {
-            if (c == '\t')
-            {
-                size_t numspaces = tabsize - (curr % tabsize);
-                res.append(numspaces, ' ');
-                curr += numspaces;
+                int temp = tabsize - (result.length() % tabsize);
+                result.append(temp, ' ');
             }
             else
             {
-                res += c;
-                curr += 1;
+
+                result += str[i];
             }
         }
-        return res;
+
+        return result;
     }
 
     int EditDistance(const std::string &left, const std::string &right, bool ignorecase) noexcept
@@ -247,5 +225,4 @@ namespace StringUtils
         // Replace code here
         return 0;
     }
-
 };
